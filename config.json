@@ -1,0 +1,14 @@
+{
+	"coinMarketCap":
+		{"apiKey": "<paste-here-your-coinmarketcap-api-key>",
+		"apiUrl": "https://pro-api.coinmarketcap.com/v1/",
+		"endpoint": "cryptocurrency/quotes/latest",
+		"tickers": "CRO,BTC,ETH,CAKE,BNB,BAT"
+		},
+	"cryptoOrgChain":
+		{"accountAddress": "<paste-here-your-cro-wallet-public-address>",
+		"apiUrl" : "https://crypto.org/explorer/api/v1/",
+		"endpoint": "accounts/"
+		}
+
+}

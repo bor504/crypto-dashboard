@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+   <head>
+        <!-- Bootstrap CSS --> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <!-- Icon librairy -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <!-- Dark theme for bootstrap-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
+   </head>
+    
+   <body class="m-5">
+   	  <div>
+   	  <h1 class="text-center">Today in crypto</h1>
+   	  </div>
+      <div class="row">
+      <table class="table table-striped table-hover col-xl-6">
+      	<caption>Last updated on: <em>UTC</em> {{ cmc["status"]["timestamp"] }}</caption>
+         <thead>
+         	<tr>
+         		<th>Currency</th>
+         		<th>Price <span class="badge badge-secondary"><span class="fas fa-arrow-circle-right"></span>24h change</span></th>
+         	</tr>
+         </thead>
+         <tbody>
+         {% for key, value in cmc["data"].items() %}
+            <tr>
+               <th scope="row"><span class="badge">#{{ value["cmc_rank"] }}</span>{{ key }} <small class="text-muted">{{ value["name"] }}</small></td>
+               <td>{{ value["quote"]["EUR"]["price"] }} € <span {% if value["quote"]["EUR"]["percent_change_24h"] > 0 %} class="badge badge-success"><span class="fas fa-arrow-circle-up"></span> {{ value["quote"]["EUR"]["percent_change_24h"] }}%{% else %} class="badge badge-danger"><span class="fas fa-arrow-circle-down"></span> {{ value["quote"]["EUR"]["percent_change_24h"] }}% {% endif %}</span></td>
+            </tr>
+         {% endfor %}
+         </tbody>
+      </table>
+      <div class="col-xl-6">
+      <div class="row card-deck">
+	  <div class="card text-white bg-success mb-3" style="max-width: 18rem"><div class="card-header">Awaiting CRO rewards</div><div class="card-body"><h5 class="card-title">{{ cro["result"]["totalRewards"][0]["amount"] }} CRO</h5><p class="mb-0">approximately {{ cro["result"]["totalRewards"][0]["eurValue"] }}€</p></div></div>
+      <div class="card text-white bg-secondary mb-3" style="max-width: 18rem"><div class="card-header">CRO staked balance</div><div class="card-body"><h5 class="card-title">{{ cro["result"]["bondedBalance"][0]["amount"] }} CRO</h5><p class="mb-0">approximately {{ cro["result"]["bondedBalance"][0]["eurValue"] }}€</p></div></div>
+      </div><div class="row card-deck">
+      <div class="card text-white bg-info mb-3" style="max-width: 18rem"><div class="card-header">CRO Wallet balance</div><div class="card-body"><h5 class="card-title">{{ cro["result"]["balance"][0]["amount"] }} CRO</h5><p class="mb-0">approximately {{ cro["result"]["balance"][0]["eurValue"] }}€</p></div></div>
+      <div class="card text-white bg-primary mb-3" style="max-width: 18rem"><div class="card-header">Total CRO balance</div><div class="card-body"><h5 class="card-title">{{ cro["result"]["totalBalance"][0]["amount"] }} CRO</h5><p class="mb-0">approximately {{ cro["result"]["totalBalance"][0]["eurValue"] }}€</p></div></div>
+	  </div>
+	  </div>
+	  
+	  
+	  </div>
+</html>
