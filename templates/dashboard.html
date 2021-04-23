@@ -5,12 +5,16 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <!-- Icon librairy -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        
+        {% if darkmode %}
         <!-- Dark theme for bootstrap-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
+        {% endif %}
    </head>
     
    <body class="m-5">
    	  <div>
+   	  {% if test %}<div class="alert alert-secondary">This is the preview version. If you want to use it, please follow instructions <a href="https://github.com/bor504/crypto-dashboard" class="text-secondary">on GitHub</a></div>{% endif%}
    	  <h1 class="text-center">Today in crypto</h1>
    	  </div>
       <div class="row">
