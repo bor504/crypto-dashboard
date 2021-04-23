@@ -1,10 +1,12 @@
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 from requests import Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+
+from distutils.util import strtobool
+
 app = Flask(__name__)
 
-with open("config.json", "r") as configFile :
-	conf = json.loads(configFile.read())
 
 
 def getCmcData(apiKey, url, endpoint, tickers):
@@ -31,6 +33,10 @@ def getCmcData(apiKey, url, endpoint, tickers):
 def prepCmcData(rawData, tickers):
 	data = rawData
 	for coin in tickers.split(","):
+		#on the sandbox version, CMC sometimes replaces the value for price change with "None", which throw an error when converting to float -> we juste replace it by 0
+		if data["data"][coin]["quote"]["EUR"]["percent_change_24h"] == None:
+			data["data"][coin]["quote"]["EUR"]["percent_change_24h"] = 0
+		
 		data["data"][coin]["quote"]["EUR"]["price"] = round(float(data["data"][coin]["quote"]["EUR"]["price"]), 4)
 		data["data"][coin]["quote"]["EUR"]["percent_change_24h"] = round(float(data["data"][coin]["quote"]["EUR"]["percent_change_24h"]), 2)
 	
@@ -62,13 +68,37 @@ def prepCroData(rawData, croPrice):
 @app.route('/')
 @app.route('/dashboard/')
 def display_dashboard():
-	cmcData = getCmcData(url = conf["coinMarketCap"]["apiUrl"], endpoint = conf["coinMarketCap"]["endpoint"], tickers = conf["coinMarketCap"]["tickers"], apiKey = conf["coinMarketCap"]["apiKey"])
+	with open("config.json", "r") as configFile :
+		conf = json.loads(configFile.read())
+		if strtobool(conf["testMode"]):
+			conf.update(conf["test"])
+		else:
+			conf.update(conf["run"])
+		conf.pop("test")
+		conf.pop("run")
+		print(json.dumps(conf, indent = 3))
+	
+	
+	try :
+		cmcData = getCmcData(url = conf["coinMarketCap"]["apiUrl"], endpoint = conf["coinMarketCap"]["endpoint"], tickers = conf["coinMarketCap"]["tickers"], apiKey = conf["coinMarketCap"]["apiKey"])
+		print(cmcData)
+	except(ConnectionError, Timeout, TooManyRedirects) as e:
+		print(e)
+		
 	cmcData = prepCmcData(cmcData, conf["coinMarketCap"]["tickers"])
-
-	croData = getCroData(url = conf["cryptoOrgChain"]["apiUrl"], endpoint = conf["cryptoOrgChain"]["endpoint"], wallet = conf["cryptoOrgChain"]["accountAddress"])
+	
+	
+	try:
+		croData = getCroData(url = conf["cryptoOrgChain"]["apiUrl"], endpoint = conf["cryptoOrgChain"]["endpoint"], wallet = conf["cryptoOrgChain"]["accountAddress"])
+	except(ConnectionError, Timeout, TooManyRedirects) as e:
+		print(e)
+		
 	croData = prepCroData(croData, cmcData["data"]["CRO"]["quote"]["EUR"]["price"])
 	
-	return render_template('dashboard.html', cmc = cmcData, cro = croData)
+	
+	darkmode = bool(strtobool(conf["darkMode"]))
+	
+	return render_template('dashboard.html', cmc = cmcData, cro = croData, darkmode = darkmode, test = bool(strtobool(conf["testMode"])))
 
 
 

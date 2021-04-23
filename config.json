@@ -1,14 +1,30 @@
 {
-	"coinMarketCap":
-		{"apiKey": "<paste-here-your-coinmarketcap-api-key>",
-		"apiUrl": "https://pro-api.coinmarketcap.com/v1/",
-		"endpoint": "cryptocurrency/quotes/latest",
-		"tickers": "CRO,BTC,ETH,CAKE,BNB,BAT"
+	"testMode": "true",
+	"darkMode": "false",
+	"test":
+		{"coinMarketCap":
+			{"apiKey": "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c",
+			"apiUrl": "https://sandbox-api.coinmarketcap.com/v1/",
+			"endpoint": "cryptocurrency/quotes/latest",
+			"tickers": "BTC,ETH,BNB,CRO,BCH,USDT,DOT,DOGE"
+			},
+		"cryptoOrgChain":
+			{"accountAddress": "cro139nl5fnhlxu2asduu5zqq8zzev0632jl2uupl8",
+			"apiUrl" : "https://crypto.org/explorer/api/v1/",
+			"endpoint": "accounts/"
+			}
 		},
-	"cryptoOrgChain":
-		{"accountAddress": "<paste-here-your-cro-wallet-public-address>",
-		"apiUrl" : "https://crypto.org/explorer/api/v1/",
-		"endpoint": "accounts/"
+	"run":
+		{"coinMarketCap":
+			{"apiKey": "<insert-here-your-own-coinmarketcap-api-key>",
+			"apiUrl": "https://pro-api.coinmarketcap.com/v1/",
+			"endpoint": "cryptocurrency/quotes/latest",
+			"tickers": "<insert-here-the-tickers-of-the-coin-you-want-to-monitor>"
+			},
+		"cryptoOrgChain":
+			{"accountAddress": "<insert-here-the-public-address-for-your-crypto-org-chain-wallet>",
+			"apiUrl" : "https://crypto.org/explorer/api/v1/",
+			"endpoint": "accounts/"
+			}
 		}
-
 }
